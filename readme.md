@@ -1,6 +1,6 @@
 # CF Image proxy
 
-> Proxy CDN for caching static assets from third-party domains via [Cloudflare Workers](https://workers.cloudflare.com).
+> Image proxy and CDN for [Cloudflare Workers](https://workers.cloudflare.com).
 
 [![Build Status](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml/badge.svg)](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml) [![Prettier Code Formatting](https://img.shields.io/badge/code_style-prettier-brightgreen.svg)](https://prettier.io)
 
@@ -14,16 +14,14 @@
 - Respects `pragma: no-cache` and related headers
 - Used in hundreds of prod sites
 
-## Config
+## Setup
 
-**All config is defined in [wrangler.toml](./wrangler.toml).**
-
-0. Create a new blank [Cloudflare Worker](https://workers.cloudflare.com).
-1. Fork / clone this repo
-2. Update the missing values in [wrangler.toml](./wrangler.toml)
-3. `npm install`
-4. `npm run dev` to test locally
-5. `npm run deploy` to deploy to cloudflare workers 💪
+1. Create a new blank [Cloudflare Worker](https://workers.cloudflare.com).
+2. Fork / clone this repo
+3. Update the missing values in [wrangler.toml](./wrangler.toml)
+4. `npm install`
+5. `npm run dev` to test locally
+6. `npm run deploy` to deploy to cloudflare workers 💪
 
 ### wrangler.toml
 
@@ -95,6 +93,12 @@ A few notes about the implementation:
 - CF runs our worker via V8 directly in an environment mimicking [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 - This means that our worker does not have access to Node.js primitives such as `fs`, `dns` and `http`.
 - It does have access to a custom [web fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+
+## TODO
+
+- [x] Initial release extracted from Notion2Site
+- [ ] Support restricting the origin domain in order to prevent abuse
+- [ ] Add a snazzy demo
 
 ## License
 
