@@ -1,0 +1,50 @@
+{
+	"name": "cf-image-proxy",
+	"private": true,
+	"description": "Proxy CDN for caching static assets from third-party domains via Cloudflare Workers.",
+	"author": "Travis Fischer <travis@transitivebullsh.it>",
+	"repository": "transitive-bullshit/cf-image-proxy",
+	"homepage": "https://transitivebullsh.it",
+	"license": "MIT",
+	"main": "./dist/main.js",
+	"engines": {
+		"node": ">=10"
+	},
+	"scripts": {
+		"start": "run-p build:watch worker:watch",
+		"prestart": "test -e dist/main.js || run-s \"build --mode development\"",
+		"dev": "run-s start",
+		"build": "NODE_ENV=production webpack --mode production",
+		"build:development": "NODE_ENV=production webpack --mode development",
+		"build:watch": "NODE_ENV=development webpack --mode development --watch",
+		"worker": "cloudworker --port 6100 --debug --enable-cache dist/main.js",
+		"worker:watch": "run-s \"worker --watch\"",
+		"prepreview": "run-s build:development",
+		"preview": "wrangler preview",
+		"prepublish": "run-s build:development",
+		"publish": "wrangler publish",
+		"deploy": "run-s \"publish --env production\"",
+		"pretest": "run-s build",
+		"test": "ava -v"
+	},
+	"devDependencies": {
+		"@cloudflare/wrangler": "^1.6.0",
+		"@dollarshaveclub/cloudworker": "^0.1.2",
+		"ava": "^2.4.0",
+		"esm": "^3.2.25",
+		"lodash.pick": "^4.4.0",
+		"npm-run-all": "^4.1.5",
+		"webpack": "^4.41.5",
+		"webpack-cli": "^3.3.10"
+	},
+	"ava": {
+		"failFast": true,
+		"snapshotDir": "./.snapshots",
+		"require": [
+			"esm"
+		]
+	},
+	"dependencies": {
+		"lodash.get": "^4.4.2"
+	}
+}

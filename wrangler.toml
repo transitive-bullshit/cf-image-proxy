@@ -1,0 +1,9 @@
+name = "cf-image-proxy"
+type = "javascript"
+webpack_config = "webpack.config.js"
+account_id = "TODO"
+workers_dev = true
+
+[env.production]
+zone_id = "TODO"
+route = "TODO"
