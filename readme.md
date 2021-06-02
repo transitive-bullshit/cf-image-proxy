@@ -9,7 +9,10 @@
 - Free 💪
 - Super simple to setup and self-host
 - Perfect lighthouse scores
+- Handles CORS for you
 - Normalizes origin URLs
+- Respects `pragma: no-cache` and related headers
+- Used in hundreds of prod sites
 
 ## Config
 
@@ -46,9 +49,23 @@ You can optionally enable Polish in your Cloudflare zone settings if you want to
 
 This may increase costs, so it's not recommended for everyone. The CF worker should support both configurations without issue.
 
+### CDN
+
+By default, all assets will be served with a `cache-control` header set to `public, immutable, s-maxage=31536000, max-age=31536000, stale-while-revalidate=60`, which effectively makes them cached at all levels indefinitely (or more practically until Cloudflare or your browser purges the asset from its cache).
+
+If you want to change this `cache-control` header or add additional headers, see [src/fetch-request.js](./src/fetch-request.js).
+
 ## Usage
 
-In the application where you want to consume your proxied iamges, you'll just need to replace your third-party image URLs.
+### Next.js Notion Starter Kit
+
+If you're using this image proxy as part of [nextjs-notion-starter-kit](https://github.com/transitive-bullshit/nextjs-notion-starter-kit), all you need to do is set `imageCDNHost` in your `site.config.js` and your image proxy will be used automatically.
+
+If you're not using this Next.js Notion boilerplate, then read on.
+
+### General Usage
+
+In the application where you want to consume your proxied images, you'll need to replace your third-party image URLs.
 
 You can replace them with your proxy domain plus a path that contains the URI-encoded version of your original domain. In TypeScript, this looks like the following:
 
@@ -68,8 +85,6 @@ export const mapImageUrl = (imageUrl: string) => {
   }
 }
 ```
-
-If you are using this image proxy as part of [nextjs-notion-starter-kit](https://github.com/transitive-bullshit/nextjs-notion-starter-kit), all you need to do is set `imageCDNHost` in your `site.config.js` and your image proxy will be used automatically.
 
 ## Technical Notes
 
